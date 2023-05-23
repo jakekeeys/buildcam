@@ -108,7 +108,7 @@ func (t *Timelapse) updateLapse(filter, lapseName, fps string) error {
 	defer os.RemoveAll(tdir)
 	lapseTmpPath := path.Join(tdir, lapseName)
 
-	_, err = exec.Command("ffmpeg", "-framerate", fps, "-pattern_type", "glob", "-i", filter, "-s:v", "1920x1080", "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", lapseTmpPath).CombinedOutput()
+	_, err = exec.Command("ffmpeg", "-framerate", fps, "-pattern_type", "glob", "-i", filter, "-s:v", "1920x1080", "-c:v", "libx265", "-crf", "30", "-pix_fmt", "yuv420p", lapseTmpPath).CombinedOutput()
 	if err != nil {
 		return err
 	}
