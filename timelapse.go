@@ -40,7 +40,7 @@ func NewTimelapse(c *Camera) (*Timelapse, error) {
 }
 
 func (t *Timelapse) saveFrame() error {
-	if time.Now().Hour() < 7 || time.Now().Hour() > 18 {
+	if time.Now().Hour() < 7 || time.Now().Hour() > 16 {
 		println("skipping saving new frame")
 		return nil
 	}
