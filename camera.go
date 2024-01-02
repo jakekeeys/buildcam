@@ -52,7 +52,7 @@ func (c *Camera) updateFrame() error {
 	defer os.RemoveAll(tdir)
 
 	mp4Path := path.Join(tdir, "frame.mp4")
-	_, err = exec.Command("wget", "https://frigate.keeys.io/live/webrtc/api/frame.mp4?src=house", "-O", mp4Path).CombinedOutput()
+	_, err = exec.Command("wget", "http://frigate:1984/api/frame.mp4?src=house", "-O", mp4Path).CombinedOutput()
 	//println(string(output))
 	if err != nil {
 		return err
