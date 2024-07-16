@@ -9,5 +9,6 @@ RUN go build -v -o app .
 FROM alpine
 WORKDIR /service
 COPY --from=build /build/app .
+COPY --from=build /build/assets ./assets
 RUN apk add --no-cache tzdata ffmpeg
 ENTRYPOINT ["./app"]

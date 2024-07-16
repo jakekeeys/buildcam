@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="https://alexxit.github.io/go2rtc/icons/apple-touch-icon-180x180.png" sizes="180x180">
+    <link rel="icon" href="https://alexxit.github.io/go2rtc/icons/favicon.ico">
+    <link rel="manifest" href="https://alexxit.github.io/go2rtc/manifest.json">
+    <title>go2rtc - Stream</title>
+    <style>
+        body {
+            background: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        .flex {
+            flex-wrap: wrap;
+            align-content: flex-start;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+<script type="module" src="./video-stream.js"></script>
+<script type="module">
+    const params = new URLSearchParams(location.search);
+    const video = document.createElement('video-stream');
+    const background = params.get('background') !== 'false';
+    const width = '1 0 ' + (params.get('width') || '320px');
+    const token = params.get('token');
+
+    video.background = background;
+    video.style.flex = width;
+    video.src = new URL('/streamws?src=house&token='+token, location.href);
+    document.body.appendChild(video);
+</script>
+</body>
+</html>

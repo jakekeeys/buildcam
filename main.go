@@ -7,6 +7,8 @@ import (
 	"github.com/robfig/cron/v3"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"os"
 	"path"
 	"time"
@@ -32,6 +34,28 @@ func main() {
 	r.GET("/", rootHandler)
 	r.GET("/snapshot", snapshotHandler)
 	r.GET("/timelapse", timelapseHandler)
+
+	r.StaticFS("/stream", http.Dir("./assets/stream"))
+	r.GET("/streamws", func(c *gin.Context) {
+		gortc, err := url.Parse("http://frigate:1984/api/ws?src=house")
+		if err != nil {
+			c.String(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		token := c.Query("token")
+		if token != apiToken {
+			c.String(http.StatusUnauthorized, "bad token")
+			return
+		}
+
+		proxy := httputil.ReverseProxy{
+			Rewrite: func(r *httputil.ProxyRequest) {
+				r.Out.URL = gortc
+			},
+		}
+		proxy.ServeHTTP(c.Writer, c.Request)
+	})
 
 	c := cron.New(cron.WithLocation(time.UTC))
 	_, err = c.AddFunc("*/15 * * * *", func() {
